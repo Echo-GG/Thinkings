@@ -1,0 +1,131 @@
+#include <bits/stdc++.h>
+using namespace std;
+//实现m进制数转n进制数(m,n均介于2~16之间)
+vector<char> transformer(const int a, const int b,const string&s)
+{
+
+	int len = s.length();
+	int decimal = 0;
+	for(int i=0;i<len;i++)
+	{
+		if(s[len-1-i]>='0'&&s[len-1-i]<='9')
+		{
+			decimal+=(int)(s[len-i-1]-'0')*pow(a,i);
+		}
+		else if(s[len-1-i]>='A'&&s[len-1-i]<='F')
+		{
+			decimal+=((int)(s[len-1-i]-'A')+10)*pow(a,i);	
+		}
+	}
+
+	vector<char>result_str;
+	int tmp = decimal;
+	while(tmp)
+	{
+		char c;
+		if(tmp%b<=9)
+		{
+			c = (char)((tmp%b)+'0');
+			result_str.push_back(c);
+		}
+		else if(tmp%b>=10&&tmp%b<=16)
+		{
+			c = (char)((tmp%b)-10+'A');
+			result_str.push_back(c);
+		}
+		tmp = tmp/b;
+	}
+	if(tmp%b<=9)
+		result_str.push_back((char)((tmp%b)+'0'));
+	else if(tmp%b>=10&&tmp%b<=16)
+		result_str.push_back((char)((tmp%b)-10+'A'));
+	return result_str;
+		
+}
+int Decimal_transformer(const int a,const string&s)
+{
+	int len = s.length();
+	int decimal = 0;
+	for(int i=0;i<len;i++)
+	{
+		if(s[len-1-i]>='0'&&s[len-1-i]<='9')
+		{
+			decimal+=(int)(s[len-i-1]-'0')*pow(a,i);
+		}
+		else if(s[len-1-i]>='A'&&s[len-1-i]<='F')
+		{
+			decimal+=((int)(s[len-1-i]-'A')+10)*pow(a,i);	
+		}
+	}
+	return decimal;
+}
+bool Input_check(const int a, const int b)
+{
+	if(a>16||a<=1)
+	{
+		return false;
+	}
+	if(b>16||b<=1)
+	{
+		return false;
+	}
+	return true;
+}
+int main()
+{
+	int m,n;
+	cout<<"使用说明:本进制转换器仅支持2,3,4,...,16进制之间的互相转换,且不支持含有小数部分的数的进制转换操作"<<endl;
+	cout<<endl;
+	cout<<"请输入待转换进制信息,输入格式:a b(a进制数转b进制数)"<<endl;
+	cin>>m>>n;
+	bool flag = Input_check(m,n);
+
+	while(!flag)
+	{
+		cout<<endl<<"Invalid Input"<<endl;
+		if(m<2&&n<2||m>16&&n>16)
+			cout<<"输入的两数均不介于2~16之间"<<endl;
+		else if(n>=2&&n<=16&&m<2)
+			cout<<"输入的"<<m<<"<2"<<"请调整第1个数字的大小"<<endl;
+		else if(n>=2&&n<=16&&m>16)
+			cout<<"输入的"<<m<<"<2"<<"请调整第1个数字的大小"<<endl;
+		else if(m>=2&&m<=16&&n<2)
+			cout<<"输入的"<<n<<"<2"<<"请调整第2个数字的大小"<<endl;
+		else if(m>=2&&m<=16&&n>16)
+			cout<<"输入的"<<n<<"<2"<<"请调整第2个数字的大小"<<endl;
+		cout<<endl<<"Please input again...";
+		cout<<endl<<"输入格式:a b(a进制数转b进制数)"<<endl;
+		int a,b;
+		cin>>a>>b;
+		m = a;
+		n = b;
+		flag = Input_check(m,n);
+		if(flag)
+			break;
+	}
+	cout<<endl<<"请以字符串形式输入待转换数"<<endl;
+	string s;
+	cin>>s;
+	if(m==n&&flag)
+	{
+		cout<<endl<<"进制相同,无需转换"<<endl;
+		cout<<endl<<"在"<<m<<"进制下该数的结果为"<<s<<endl;
+		cout<<endl<<"其十进制下的结果为"<<Decimal_transformer(m,s)<<endl;
+		return 0;
+	}
+
+	
+	cout<<endl<<m<<"进制转"<<n<<"进制结果为";
+	vector<char>result_str = transformer(m,n,s);
+	for(int i=result_str.size()-1;i>=0;i--)
+	{
+		if(i==result_str.size()-1&&result_str[i]=='0')
+			continue;
+		cout<<result_str[i];
+	}
+	cout<<endl;
+		
+
+	
+	return 0;
+}
