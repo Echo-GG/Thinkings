@@ -4,7 +4,7 @@ I found the learning process of CS is unnatural and low-efficient only through n
 
 I began to reflect on my study journey and finally came up with the idea of starting truly coding on my own.
 
-Coding on my own means here's no AI using in the whole process,trying to use DevC++ to enter almost every character on my own without real time prompt words in IDE.
+Coding on my own means here's no AI using in the main process,trying to use VisualStudioCode to enter almost every character on my own without real time prompt code from AI.
 
 I try to follow my heart to complete this project in a new perspective.That is the field which I whole-heartedly pursue.
 
