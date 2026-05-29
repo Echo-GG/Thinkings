@@ -1,0 +1,10 @@
+^D:\CODE\C++_CODE\LEETCODE\排序\BUILD\CMAKEFILES\A6F7C5558371D09BC509A7044AC05D8F\GENERATE.STAMP.RULE
+setlocal
+D:\CMake\bin\cmake.exe -SD:/Code/C++_code/LeetCode/排序 -BD:/Code/C++_code/LeetCode/排序/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/Code/C++_code/LeetCode/排序/build/sort_demo.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

@@ -1,0 +1,134 @@
+1. 创建文件
+main.cpp
+Display.h
+Display.cpp
+QuickSort.cpp
+QuickSort.h
+CMakeLists.txt
+
+2.创建并实现一个不位于主函数(main.cpp)内，但希望未来被调用或独立维护的函数(库)
+
+以Display函数为例:
+
+(1). Display.h:
+# pragma once
+#include <vector>
+#include <iostream>
+
+void Display(const std::vector<int>& Array);
+
+Notes:
+(i). 需要包含宏定义`# pragma once`;
+(ii). 以及后续Display.cpp函数实现中需要用到的头文件;
+(iii). 同时需要声明对应的函数(当然一个头文件中也可以包含多个函数);
+(iv). 这里最好不要using namespace std; 防止更大型工程中可能存在的命名空间污染问题。
+
+(2). Display.cpp
+#include "Display.h"
+using namespace std;
+void Display(const vector<int>& Array){
+    for(int i=0;i<Array.size();i++){
+        if(i!=Array.size()-1){
+            cout<<Array[i]<<" ";
+        }
+        else{
+            cout<<Array[i]<<endl;
+        }
+    }
+}
+
+Notes:
+(i). 需要#include 对应的头文件 (e.g. #include "Display.h");
+(ii). 正常实现对应的函数功能，可以进行using namespace std;等写法，根据个人需要和工程环境来决定。
+
+3. CMake管理
+
+(1). 创建CMakeLists.txt文件:
+
+```CMakeLists.txt
+cmake_minimum_required(VERSION 3.16)
+
+project(sort_demo LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+add_executable(sort_demo
+    main.cpp
+    QuickSort.cpp
+    Display.cpp
+)
+```
+
+Notes:
+(i). cmake_minimum_required(VERSION 3.16)
+标识了对CMake的最低版本要求，非必要但是不写会有warning.
+
+(ii). project(sort_demo LANGUAGES CXX)
+前一个参数为项目名称，后面为相关配置信息。
+完整的语法格式如下:
+```CMakeLists.txt
+# PROJECT 指令的语法是：
+project(<PROJECT-NAME> [<language-name>...])
+project(<PROJECT-NAME>
+       [VERSION <major>[.<minor>[.<patch>[.<tweak>]]]]
+       [DESCRIPTION <project-description-string>]
+       [HOMEPAGE_URL <url-string>]
+       [LANGUAGES <language-name>...])
+
+```
+
+(iii). set各项配置(非必需)
+
+(iv). add_executable：定义工程会生成一个可执行程序
+```CMakeLists.txt
+add_executable(sort_demo
+    main.cpp
+    QuickSort.cpp
+    Display.cpp
+)
+```
+最终生成的可执行文件名为sort_demo,其链接了main.cpp、QuickSort.cpp、Display.cpp。
+
+(2). mkdir build
+防止cmake生成的各项文件共处一室，导致工作目录混乱。
+
+(3). cd或Set-Location至build目录下，执行命令行；
+
+```Linux
+cmake CMakeLists.txt ..
+```
+
+Notes：
+(i).这一步实在读取并执行上一级目录中CMakeLists.txt中的指令，请确保该文件准确无误。
+(ii). 同时这也说明了，相关工程内文件的增删与配置的修改，都需要在CMakeLists.txt文件中进行并同步。
+(iii). ..这个参数表示访问的CMakeLists.txt文件是在当前目录(e.g. 排序/build)的上一级目录(e.g. 排序)中；
+若直接执行
+```Linux
+cmake CMakeLists.txt
+```
+则会 Error:找不到该文件。
+
+(4). 维持build目录下:
+
+执行命令行；
+```Linux
+cmake --build . --config Debug
+```
+
+Notes:
+(i). 这一步替代了无VS环境下的生成MakeFile文件的步骤；
+i.e.若没有使用Visual Studio的CMake相关配置，则这一步可以直接在build目录下执行make命令。即可生成目标可执行文件sort_demo
+(ii). 由于本机配置了Visual Studio，并使用其相关的CMake配置，故不会产生常规的MakeFile文件。
+(iii).在build目录下执行前述命令行，即可生成一个build/Debug文件夹:
+其中包含sort_demo.exe windows可执行文件与sort_demo.pdb可调试文件。
+
+4. 执行完前述所有过程后，即可切换至对应的Debug目录下:
+执行命令行；
+```Linux
+./sort_demo.exe 
+```
+即可执行对应的可执行文件。
+
+此时的项目即可在终端正常运行，展现出一切的预期效果。
